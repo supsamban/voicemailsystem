@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        html, body {
+    margin: 0;
+    height: 100%;
+}
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body onmousedown="rightClick()" oncontextmenu="return false;">
+    <h1>welcome to home page</h1>
+    <h2>Inbox</h2>  
+    <h2>Sent Mail</h2>
+    <h2>Important</h2>
+    <h2>Create Folder</h2>
+
+    <audio autoplay  = "" id="denied" preload="auto" controls="false">
+        <source src="loadpage.mp3" />
+    </audio>
+
+    <audio autoplay  = "" id="contents" preload="auto" controls="false">
+            <source src="homecontents.mp3" />
+        </audio>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+   
+   flag = 0 
+    document.body.addEventListener("click", function (evt) {
+        if (flag == 0){
+        $('#denied')[0].play();
+        flag = 1
+        }
+});
+// righClick event.
+     function rightClick() {
+         var rightclick;
+         var e = window.event;
+         if(e.which == 3) {
+            console.log("HelloWorld : ");
+            e.preventDefault();
+            $('#contents')[0].play();recognition.start()
+
+         }
+         e.preventDefault();
+         console.log("Manish");
+         
+         console.log("Kumar");
+     }
+
+
+
+     //speech to text 
+
+     var SpeechRecognition = window.webkitSpeechRecognition;
+  
+var recognition = new SpeechRecognition();
+ 
+var Textbox = $('#textbox');
+var instructions = $('instructions');
+ 
+var Content = '';
+ 
+recognition.continuous = true;
+ 
+recognition.onresult = function(event) {
+ 
+  var current = event.resultIndex;
+ 
+  var transcript = event.results[current][0].transcript;
+ 
+    Content = transcript;
+   if(Content == "open inbox" || Content == "Open inbox" || Content == "Open Inbox") {
+       console.log(Content);
+    window.location.href = "http://localhost:3000/inbox";
+   }
+  
+   else if(Content == "open sent mail" || Content == "Open sent mail" || Content == "Open Sent Mail") {
+       console.log(Content);
+    window.location.href = "http://localhost:3000/sentmail";
+   }
+
+   else if(Content == "open important" || Content == "Open important" || Content == "Open Important") {
+       console.log(Content);
+    window.location.href = "http://localhost:3000/important";
+   }
+
+   else if(Content == "open folders" || Content == "Open folders" || Content == "Open Folders") {
+       console.log(Content);
+    window.location.href = "http://localhost:3000/folders";
+   }
+};
+ 
+recognition.onstart = function() { 
+  instructions.text('Voice recognition is ON.');
+}
+ 
+recognition.onspeechend = function() {
+  instructions.text('No activity.');
+}
+ 
+recognition.onerror = function(event) {
+  if(event.error == 'no-speech') {
+    instructions.text('Try again.');  
+  }
+}
+ 
+$('#start-btn').on('click', function(e) {
+  if (Content.length) {
+    Content += ' ';
+  }
+  recognition.start();
+});
+ 
+Textbox.on('input', function() {
+  Content = $(this).val();
+})
+//end of speech to text.
+     
+    
+      
+</script>
+
+</html>
